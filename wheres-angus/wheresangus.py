@@ -44,7 +44,45 @@ def location_for_country(country):
 	q = "This country is in " + country['data']['geography']['location']
 	return q, country['data']['name']
 
-QUESTION_FUNCS = [intro_question_for_country, major_urban_areas_for_country, linguistic_makeup_for_country, location_for_country]
+def flag_description_for_country(country):
+	q = "This country's flag "
+	fd = country['data']['government']['flag_description']
+	q += fd['description']
+	if 'note' in fd.keys():
+		q += '; ' + fd['note']
+	return q, country['data']['name']
+
+def national_symbol_for_country(country):
+	q = "This country's national symbol has"
+	nat_sym = country['data']['government']['national_symbol']
+	colors = None
+	if 'colors' in nat_sym:
+		colors = [c['color'] for c in nat_sym['colors']]
+	syms = None
+	if 'symbols' in nat_sym:
+		syms = [s['symbol'] for s in nat_sym['symbols']]
+	if colors is not None:
+		q += ' the colors ' + ', '.join(colors)
+		if syms is not None:
+			q += ' and ' + ', '.join(syms)
+		return q, country['data']['name']
+	if colors is None and syms is not None:
+		return q + ' the symbols ' + ', '.join(syms), country['data']['name']
+	raise Exception('failed')
+
+
+QUESTION_FUNCS = [intro_question_for_country, major_urban_areas_for_country, 
+	linguistic_makeup_for_country, location_for_country, flag_description_for_country,
+	national_symbol_for_country]
+
+def all_questions_for_country(country):
+	questions = {}
+	for q in QUESTION_FUNCS:
+		try:
+			questions[q] = q(country)
+		except:
+			questions[q] = None
+	return questions
 
 def random_question_for_country(country):
 	return random.choice(QUESTION_FUNCS)(country)
