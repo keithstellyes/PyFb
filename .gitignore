@@ -1,9 +1,20 @@
+# DON'T PUBLISH YOUR SECRETS / API KEYS / TOKENS ! #
+tokens.json
+
+### personal experiments ###
 hitchhike/
 pokemon/
-tokens.json
+
+# result files
 out.html
 out.png
+
+###  databases / caches ###
 tetris.db
 jeopardy.db
+
+# Python cache
 __pycache__
+
+# personal script
 push-files.sh
