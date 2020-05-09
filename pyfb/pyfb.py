@@ -15,6 +15,9 @@ class PyFb:
 	def get_posts_date_descending(self):
 		return self.get_posts() #todo
 
+	def get_post_comments(self, post_id):
+		return self.graph.get_all_connections(id=post_id, connection_name='comments')
+
 	def create_post(self, message, image_path=None):
 		if image_path is None:
 			return self.graph.put_object(parent_object=self.user_id, message=message,
@@ -41,3 +44,6 @@ class PyFb:
 		return tally
 	def comment_on_post(self, post_id, message):
 		return self.graph.put_comment(object_id=post_id, message=message)
+
+	def get_username_for_user_id(self, user_id):
+		return self.graph.request('/{}?fields=name'.format(user_id))['name']

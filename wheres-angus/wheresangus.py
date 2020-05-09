@@ -1,6 +1,9 @@
-import json, os, random
+import json, os, random, sqlite3
 
-FACTBOOK_PATH = os.path.dirname(os.path.abspath(__file__)) + '/factbook.json'
+this_dir = os.path.dirname(os.path.abspath(__file__))
+FACTBOOK_PATH = this_dir + '/factbook.json'
+
+db_path = this_dir + '/wheresangus.db'
 
 class bcolors:
     HEADER = '\033[95m'

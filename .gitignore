@@ -12,6 +12,7 @@ out.png
 ###  databases / caches ###
 tetris.db
 jeopardy.db
+wheresangus.db
 
 # Python cache
 __pycache__
