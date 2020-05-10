@@ -68,9 +68,18 @@ def do_post(post_text, photo, a, fb_client, db_client):
 
 def clean_answer(ans):
 	ans = ans.lower()
+	if ans.count(',') == 1:
+		post, pre = ans.split(',')
+		ans = pre + post
+	ans = ans.replace('the', '')
 	ans = ans.replace(' ', '').replace(',','').replace('!','').replace('?','')
 	ans = ans.replace('whatis','').replace('whereis','')
 	return ans
+
+def clean_answer_tests():
+	eqs = [['South KOREA', 'Korea, South'], ['America', 'america'], ['bahamas', 'bahamas, the']]
+	for w1, w2 in eqs:
+		assert clean_answer(w1) == clean_answer(w2)
 
 def do_answers(fb_client, db_client):
 	post_id, answer = db_client.latest_post()
@@ -107,7 +116,7 @@ if __name__ == '__main__':
 		post_text, photo, a = make_post_content()
 	if len(sys.argv) != 2:
 		print('Need a mode!')
-		print('MODES: debug, doquestion, doanswers')
+		print('MODES: debug, doquestion, doanswers, test')
 		sys.exit(1)
 	elif sys.argv[1] == 'debug':
 		print('================')
@@ -118,3 +127,5 @@ if __name__ == '__main__':
 		do_post(post_text, photo, a, fb_client=get_fb_client(), db_client=get_db_client())
 	elif sys.argv[1] == 'doanswer':
 		do_answers(db_client=get_db_client(), fb_client=get_fb_client())
+	elif sys.argv[1] == 'test':
+		clean_answer_tests()
