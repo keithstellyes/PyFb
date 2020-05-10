@@ -18,12 +18,12 @@ class bcolors:
 def get_factbook():
 	return json.load(open(FACTBOOK_PATH, 'r'))
 
-def intro_question_for_country(country):
+def q_intro_question(country):
 	intro = '.'.join(country['data']['introduction']['background'].split('\n')[0].split('.')[0:2])
 
 	return intro.replace(country['data']['name'], '[COUNTRY]'), country['data']['name']
 
-def major_urban_areas_for_country(country):
+def q_major_urban_areas(country):
 	q = "The major urban areas of this country include: "
 	urban_areas = [ua['place'] for ua in country['data']['people']['major_urban_areas']['places']]
 	if len(urban_areas) == 1:
@@ -32,7 +32,7 @@ def major_urban_areas_for_country(country):
 	q += ' and ' + urban_areas[-1]
 	return q, country['data']['name']
 
-def linguistic_makeup_for_country(country):
+def q_linguistic_makeup(country):
 	q = "The linguistic makeup of this country is: "
 	langs = []
 	for lang in country['data']['people']['languages']['language']:
@@ -43,11 +43,11 @@ def linguistic_makeup_for_country(country):
 	q += ', '.join(langs)
 	return q, country['data']['name']
 
-def location_for_country(country):
+def q_location(country):
 	q = "This country is in " + country['data']['geography']['location']
 	return q, country['data']['name']
 
-def flag_description_for_country(country):
+def q_flag_description(country):
 	q = "This country's flag "
 	fd = country['data']['government']['flag_description']
 	q += fd['description']
@@ -55,7 +55,7 @@ def flag_description_for_country(country):
 		q += '; ' + fd['note']
 	return q, country['data']['name']
 
-def national_symbol_for_country(country):
+def q_national_symbol(country):
 	q = "This country's national symbol has"
 	nat_sym = country['data']['government']['national_symbol']
 	colors = None
@@ -73,10 +73,19 @@ def national_symbol_for_country(country):
 		return q + ' the symbols ' + ', '.join(syms), country['data']['name']
 	raise Exception('failed')
 
+def q_capital_etymology(country):
+	q = "Etymology of this counry's capital: "
+	etymology = country['data']['government']['capital']['etymology']
+	return q + etymology, country['data']['name']
 
-QUESTION_FUNCS = [intro_question_for_country, major_urban_areas_for_country, 
-	linguistic_makeup_for_country, location_for_country, flag_description_for_country,
-	national_symbol_for_country]
+def q_country_name_etymology(country):
+	q = "Etymology of this country's name: " + country['data']['government']['country_name']['etymology']
+	return q, country['data']['name']
+
+
+QUESTION_FUNCS = [q_intro_question, q_major_urban_areas, 
+	q_linguistic_makeup, q_location, q_flag_description,
+	q_national_symbol, q_capital_etymology, q_country_name_etymology]
 
 def all_questions_for_country(country):
 	questions = {}
