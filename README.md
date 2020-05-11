@@ -5,6 +5,8 @@ a shared library with Facebook bots specifically in mind, this is a simple layer
 Facebook Python Graph library, given its hyper-focus on bots, there is no desire for any added APIs that
 do not service this end.
 
+The code here may lag behind what's actually "live" on the original bots (for example, to avoid "spoilers")
+
 # On Practices
 
 I generally have tried to maintain best coding practices, such as separation of FB and bot core logic. However
