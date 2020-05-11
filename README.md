@@ -43,3 +43,9 @@ The original bots are as follows (please link to original if standing up an inst
 * `jeopardy`: [Jeopardybot Jeff69](https://www.facebook.com/jeopardybot69/)
 * `tetris`: [Tetris Bot 1984](https://www.facebook.com/tetrisbot1984)
 * `wheres-angus`: [Where's Angus Bot 1215](https://www.facebook.com/wheresangus1215)
+
+# TODOs
+
+* Clean-up of lazy coding (isn't this a TODO for every project? :-)
+* Ensure Python requirements.txt is correct
+* More documentation is always a good thing (Right now much documentation requires actual reading of source code)
