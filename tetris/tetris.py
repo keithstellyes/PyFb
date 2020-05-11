@@ -271,6 +271,7 @@ class TetrisState:
 				config['rows']*config['cell_size']))
 		else:
 			img = Image.open(bg)
+			# TODO: naughty hard-coding, whether this looks good depends on source background
 			xoff += img.size[0] // 4
 			cell_size = img.size[1] // config['rows']
 		draw = ImageDraw.Draw(img)

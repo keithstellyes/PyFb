@@ -68,6 +68,9 @@ def spot(image, draw):
 	new_color = (old_color[0], old_color[1], old_color[2] // 2 + old_color[2] // 3)
 	draw.ellipse([x, y, x + spot_w, y + spot_h], fill=new_color)
 
+##################################################################
+#### Perlin Noise stuff that I found somewhere on the internet ###
+##################################################################
 def perlin_noise(x, y, z):
     X = int(x) & 255                  # FIND UNIT CUBE THAT
     Y = int(y) & 255                  # CONTAINS POINT.
@@ -118,3 +121,4 @@ permutation = [151,160,137,91,90,15,
    138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180]
 for i in range(256):
     p[256+i] = p[i] = permutation[i]
+##################################################################

@@ -28,6 +28,7 @@ class TetrisBot:
 
 	def write_state(self, tetris_state, msg_prefix=''):
 		ts = int(datetime.now().timestamp())
+		## TODO: hardcoded! very naughty...
 		#bg = 'angus.jpeg
 		bg = 'angus2.jpg'
 		tetris_state.to_image('out.png', bg=bg)
