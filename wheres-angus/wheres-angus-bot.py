@@ -3,6 +3,7 @@ from datetime import datetime
 
 sys.path.insert(0, '..')
 from pyfb.pyfb import PyFb
+from pyfb.util import accept_answer
 from angusphotos import ap
 import wheresangus
 
@@ -66,28 +67,19 @@ def do_post(post_text, photo, a, fb_client, db_client):
 	post_id = fb_client.create_post(message=post_text, image_path=photo)['post_id']
 	db_client.record_post(post_id=post_id, answer=a, photo=photo)
 
-def clean_answer(ans):
-	ans = ans.lower()
-	if ans.count(',') == 1:
-		post, pre = ans.split(',')
-		ans = pre + post
-	ans = ans.replace('the', '')
-	ans = ans.replace(' ', '').replace(',','').replace('!','').replace('?','')
-	ans = ans.replace('whatis','').replace('whereis','')
-	return ans
-
 def clean_answer_tests():
-	eqs = [['South KOREA', 'Korea, South'], ['America', 'america'], ['bahamas', 'bahamas, the']]
+	eqs = [['South KOREA', 'Korea, South'], ['America', 'america'], ['bahamas', 'bahamas, the'], ['Pitcairn Island', 'Pitcairn Islands']]
 	for w1, w2 in eqs:
-		assert clean_answer(w1) == clean_answer(w2)
+		assert accept_answer(w1, (w2,))
 
 def do_answers(fb_client, db_client):
-	post_id, answer = db_client.latest_post()
+	post_id, answers = db_client.latest_post()
+	answers = answers.split('|')
 	correct_users = {}
 	for comment in fb_client.get_post_comments(post_id):
 		user = comment['from']
 		resp = comment['message']
-		if user['id'] not in correct_users.keys() and clean_answer(resp) == clean_answer(answer):
+		if user['id'] not in correct_users.keys() and accept_answer(resp, answers):
 			correct_users[user['id']] = comment['id']
 			db_client.record_correct_answer(user_id=user['id'], post_id=post_id, given_answer=resp)
 

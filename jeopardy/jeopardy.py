@@ -19,22 +19,6 @@ def get_questions_succinct(count):
 			'json':json.dumps(q)})
 	return results
 
-# stolen from Rosetta Code
-def minimumEditDistance(s1,s2):
-    if len(s1) > len(s2):
-        s1,s2 = s2,s1
-    distances = range(len(s1) + 1)
-    for index2,char2 in enumerate(s2):
-        newDistances = [index2+1]
-        for index1,char1 in enumerate(s1):
-            if char1 == char2:
-                newDistances.append(distances[index1])
-            else:
-                newDistances.append(1 + min((distances[index1],
-                                             distances[index1+1],
-                                             newDistances[-1])))
-        distances = newDistances
-    return distances[-1]
 
 def answer_clean(s):
 	s = s.replace('<i>', '')
@@ -47,9 +31,6 @@ def answer_clean(s):
 	s = s.replace('WHATIS', '')
 	s = s.replace('WHOIS', '')
 	return s
-
-def accept_answer(expect, actual, edit_threshold=3):
-	return minimumEditDistance(answer_clean(expect), answer_clean(actual)) <= edit_threshold
 
 if __name__ == '__main__':
 	questions = get_questions_succinct(10)
