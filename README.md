@@ -31,7 +31,7 @@ highly recommend https://crontab.guru/ , this is what I use.
 Bot logic assumes it can read from a `tokens.json`, `add-token.py` is a command-line utility that holds your hand
 in adding new tokens. For what the key is, you'll have to dig in
 
-You are free to stand up a public instance of these bots if you so desire; however I ask 3 things:
+You are free to stand up a public instance of one of the already-made bots if you so desire; however I ask 3 things:
 
 * MUST link to this repo in bot's description
 * One of the following MUST be true:
@@ -44,6 +44,8 @@ The original bots are as follows (please link to original if standing up an inst
 * `jeopardy`: [Jeopardybot Jeff69](https://www.facebook.com/jeopardybot69/)
 * `tetris`: [Tetris Bot 1984](https://www.facebook.com/tetrisbot1984)
 * `wheres-angus`: [Where's Angus Bot 1215](https://www.facebook.com/wheresangus1215)
+
+NOTE: if you're just using the `pyfb` library, and not any of the bot logic, none of the above applies.
 
 # TODOs
 
