@@ -1,3 +1,5 @@
+# a utility for adding tokens to tokens file
+
 import json, os, sys
 
 this_dir = os.path.dirname(os.path.abspath(__file__)) + '/'
@@ -8,7 +10,11 @@ token_path = DEFAULT_TOKEN_PATH
 if len(sys.argv) > 1:
 	token_path = sys.argv[1]
 
-token_data = json.load(open(token_path, 'r'))
+token_data = {}
+try:
+	token_data = json.load(open(token_path, 'r'))
+except FileNotFoundError:
+	print(token_path + 'not found')
 print('token path:', token_path)
 key = input('token key:')
 value = input('token value:')
