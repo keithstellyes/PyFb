@@ -29,14 +29,13 @@ highly recommend https://crontab.guru/ , this is what I use.
 Bot logic assumes it can read from a `tokens.json`, `add-token.py` is a command-line utility that holds your hand
 in adding new tokens. For what the key is, you'll have to dig in
 
-You are free to stand up an instance of these bots if you so desire; however I ask 3 things:
+You are free to stand up a public instance of these bots if you so desire; however I ask 3 things:
 
-* Reference Keith Stellyes as original author in bot's description
-* Link to this repo in bot's description
-* If you're going to stand-up an instance, please have one of the following be true:
--- Have it be _derivitative_
--- Have the original bot be inactive for at least 1 week
--- Not be on Facebook (e.g. Instagram or Reddit are OK)
+* MUST link to this repo in bot's description
+* One of the following MUST be true:
+    * Have it be _derivitative_
+    * OR, have the original bot be inactive for at least 1 week
+    * OR, not be on Facebook (e.g. Instagram or Reddit are OK)
 
 The original bots are as follows (please link to original if standing up an instance):
 
