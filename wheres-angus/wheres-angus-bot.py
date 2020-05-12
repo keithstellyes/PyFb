@@ -88,7 +88,7 @@ def do_answers(fb_client, db_client):
 		fb_client.comment_on_post(post_id=correct_users[correct_user], message=message)
 
 	leaderboards = db_client.get_leaderboard_top10()
-	message = 'The answer was {}'.format(answer)
+	message = 'The potential answers were {}'.format(answers)
 	pos = 1
 	if leaderboards is not None and len(leaderboards) > 0:
 		for row in leaderboards:
