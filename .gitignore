@@ -16,3 +16,4 @@ __pycache__
 
 # personal script
 push-files.sh
+*.pem

@@ -44,6 +44,8 @@ The original bots are as follows (please link to original if standing up an inst
 * `jeopardy`: [Jeopardybot Jeff69](https://www.facebook.com/jeopardybot69/)
 * `tetris`: [Tetris Bot 1984](https://www.facebook.com/tetrisbot1984)
 * `wheres-angus`: [Where's Angus Bot 1215](https://www.facebook.com/wheresangus1215)
+* `electoral-college`: [Election Bot 1776](https://www.facebook.com/Election-Bot-1776-107617517622641/)
+* `xkcd`: [XKCD Bot](https://www.facebook.com/XKCD-Bot-695-108218474234986/)
 
 NOTE: if you're just using the `pyfb` library, and not any of the bot logic, none of the above applies.
 

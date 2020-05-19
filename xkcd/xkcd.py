@@ -76,5 +76,9 @@ def get_comic(num, cache):
 
 # make it easy for a cronjob to grab latest say, every 12 hours
 if __name__ == '__main__':
+	# ensure cache is all set-up
+	cache = get_cache()
+	cache_init(cache)
+	###
 	print('Latest comic!')
 	print(get_latest_comic(get_cache()))
