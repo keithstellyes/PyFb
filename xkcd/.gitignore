@@ -1,0 +1,6 @@
+# ignore downloaded images...
+*.png
+*.jpg
+*.jpeg
+
+xkcd.db
