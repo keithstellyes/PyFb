@@ -56,6 +56,11 @@ def get_latest_comic(cache):
 		print('Latest comic cache HIT')
 	return comic
 
+def get_latest_from_cache(cache):
+	cursor = cache.cursor()
+	cursor.execute('SELECT blob FROM Comics ORDER BY num DESC LIMIT 1;')
+	return json.loads(cursor.fetchone()[0])
+
 def get_comic(num, cache):
 	cursor = cache.cursor()
 	cursor.execute('SELECT blob FROM Comics WHERE num=? LIMIT 1;', (int(num),))
@@ -68,3 +73,8 @@ def get_comic(num, cache):
 	else:
 		print(num, 'cache HIT, reading from cache')
 		return json.loads(latest[0])
+
+# make it easy for a cronjob to grab latest say, every 12 hours
+if __name__ == '__main__':
+	print('Latest comic!')
+	print(get_latest_comic(get_cache()))
