@@ -130,7 +130,10 @@ def extract_country(factbook, country, target_filename):
 	code = code[1:]
 	fname = code + '.png'
 	zf = zipfile.ZipFile('flags.zip')
-	zf.extract(fname)
+	try:
+		zf.extract(fname)
+	except KeyError:
+		return False
 	os.rename(fname, target_filename)
 	return True
 if __name__ == '__main__':
