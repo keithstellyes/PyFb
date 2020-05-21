@@ -1,4 +1,4 @@
-import json, os, random, sqlite3
+import json, os, random, sqlite3, zipfile
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 FACTBOOK_PATH = this_dir + '/factbook.json'
@@ -114,6 +114,25 @@ def random_question(factbook):
 			print('Failed to use question {} for country {} with exception {}'.format(selected_question, country['data']['name'], e))
 	return 'FAILED TO GENERATE QUESTION FOR ' + country, country
 
+def random_flag(factbook, target_filename='out-flag.png'):
+	while True:
+		country = random_country(factbook)
+		if extract_country(factbook, country, target_filename):
+			return country['data']['name']
+
+# uses a flags.zip from https://flagpedia.net/download , size doesn't matter as long as PNG
+def extract_country(factbook, country, target_filename):
+	code = None
+	try:
+		code = country['data']['communications']['internet']['country_code']
+	except KeyError:
+		return False
+	code = code[1:]
+	fname = code + '.png'
+	zf = zipfile.ZipFile('flags.zip')
+	zf.extract(fname)
+	os.rename(fname, target_filename)
+	return True
 if __name__ == '__main__':
 	factbook = get_factbook()
 	f = open('malaysia.json', 'w')
