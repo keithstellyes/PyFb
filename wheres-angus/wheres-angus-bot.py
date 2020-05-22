@@ -11,7 +11,7 @@ import wheresangus
 this_dir = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DB_PATH = this_dir + '/wheresangus.db'
 
-DO_FLAG_QUESTION_RATE = 0.5
+DO_FLAG_QUESTION_RATE = 0.25
 
 def thing_happens(rate):
 	assert rate >= 0.0 and rate <= 1.0
