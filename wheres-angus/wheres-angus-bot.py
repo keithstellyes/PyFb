@@ -62,6 +62,7 @@ def make_post_content():
 		return '', 'out-flag.png', wheresangus.random_flag(factbook)
 	else:
 		q, a = wheresangus.random_question(factbook)
+		q = q.replace(a, 'COUNTRY')
 		photo = ap.random_angus_photo_file_path()
 		post_text = q + '\n({})'.format(photo.split('/')[-1])
 		return post_text, photo, a
