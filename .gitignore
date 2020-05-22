@@ -10,6 +10,7 @@ out.html
 out.png
 
 ###  databases / caches ###
+is-user-cache.db
 
 # Python cache
 __pycache__

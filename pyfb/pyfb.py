@@ -1,4 +1,7 @@
-import facebook
+import facebook, os, sqlite3
+
+is_user_cache = sqlite3.connect(os.path.dirname(os.path.abspath(__file__)) + '/is-user-cache.db')
+is_user_cache.cursor().execute('CREATE TABLE IF NOT EXISTS IsUserCache(id TEXT, isUser INTEGER)')
 
 def get_user_id(graph, access_token):
 	r = graph.request('/me?fields=id&access_token="{}"'.format(access_token))
@@ -35,15 +38,44 @@ class PyFb:
 	def get_post_reaction_tally(self, post_id):
 		reactions = self.get_post_reactions(post_id); print(reactions);
 		tally = {}
+		users = []
+		not_users = []
 		for reaction in reactions:
 			if 'type' not in reaction.keys():
 				continue # special reacts don't have a type!!!!!!
+			if not(self.is_user(reaction['id'])):
+				not_users.append(reaction)
+				continue
+			else:
+				users.append(reaction)
 			if reaction['type'] not in tally.keys():
 				tally[reaction['type']] = 0
 			tally[reaction['type']] += 1
+		print('users:{} not users: {}'.format(users, not_users))
 		return tally
 	def comment_on_post(self, post_id, message):
 		return self.graph.put_comment(object_id=post_id, message=message)
 
 	def get_username_for_user_id(self, user_id):
 		return self.graph.request('/{}?fields=name'.format(user_id))['name']
+
+	# Facebook makes this more painful than it really should be to check
+	def is_user(self, id):
+		result = True
+		cursor = is_user_cache.cursor()
+		cursor.execute('SELECT isUser FROM IsUserCache WHERE id = ? LIMIT 1', (id,))
+		results = cursor.fetchall()
+		if len(results) > 0:
+			print('Cache hit for {}, results: {}, {}'.format(id, results, results[0][0] == 1))
+			return results[0][0] == 1
+		try:
+			result = self.graph.request('/{}?metadata=1'.format(id))['metadata']['type'] == 'user'
+		except facebook.GraphAPIError as e:
+			# #10 is returned on no permissions, we don't have permission to read pages
+			# of course, 500 errors are possible too, so we 
+			result = not(str(e).startswith('(#10)'))
+		print('cache miss for {} got {}'.format(id, result))
+		resulti = result == 1
+		cursor.execute('INSERT INTO IsUserCache(isUser, id) VALUES(?, ?)', (resulti, id))
+		is_user_cache.commit()
+		return result
