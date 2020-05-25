@@ -81,10 +81,11 @@ def clean_answer_tests():
 	eqs = [['South KOREA', 'Korea, South'], ['America', 'america'], ['bahamas', 'bahamas, the'], ['Pitcairn Island', 'Pitcairn Islands']]
 	for w1, w2 in eqs:
 		assert accept_answer(w1, (w2,))
-	china_names = names(wheresangus.get_factbook()['countries']['china']).split('|')
+	china_names = wheresangus.names(wheresangus.get_factbook()['countries']['china']).split('|')
 	print(china_names)
 	accept_answer('People\'s Republic of China', china_names)
 	accept_answer('CHINA!!', china_names)
+	accept_answer('PRC', china_names)
 
 def do_answers(fb_client, db_client):
 	post_id, answers = db_client.latest_post()

@@ -49,6 +49,9 @@ def accept_answer(actual, possible_answers, tolerance=3):
 	for expect in possible_answers:
 		expect = normalize_answer(expect)
 		if len(actual) <= 3:
-			return expect == actual
+			if expect == actual:
+				return True
 		else:
-			return minimumEditDistance(expect, actual) <= tolerance
+			if minimumEditDistance(expect, actual) <= tolerance:
+				return True
+	return False
