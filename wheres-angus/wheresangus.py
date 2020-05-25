@@ -126,7 +126,8 @@ def q_country_name_etymology(country):
 
 QUESTION_FUNCS = [q_intro_question, q_major_urban_areas, 
 	q_linguistic_makeup, q_location, q_flag_description,
-	q_national_symbol, q_capital_etymology, q_country_name_etymology]
+	q_national_symbol, q_capital_etymology, q_country_name_etymology, 
+	q_misc_facts, q_misc_facts, q_misc_facts]
 
 def all_questions_for_country(country):
 	questions = {}
