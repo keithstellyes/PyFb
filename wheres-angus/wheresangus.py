@@ -15,6 +15,14 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def names(country):
+	names = [country['data']['name']]
+	try:
+		names = names + list(country['data']['government']['country_name'].values())
+	except:
+		pass
+	return '|'.join(names)
+
 def get_factbook():
 	return json.load(open(FACTBOOK_PATH, 'r'))
 
@@ -24,7 +32,7 @@ def q_intro_question(country):
 	segment_begin = random.randint(0, segment_begin_max)
 	intro = '.'.join(sents[segment_begin:(segment_begin + 2)])
 
-	return intro.replace(country['data']['name'], '[COUNTRY]'), country['data']['name']
+	return intro.replace(country['data']['name'], '[COUNTRY]'), names(country)
 
 def q_major_urban_areas(country):
 	q = "The major urban areas of this country include: "
@@ -33,7 +41,7 @@ def q_major_urban_areas(country):
 		return "The major urban area of this country is " + urban_areas[0], country['data']['name']
 	q += ', '.join(urban_areas[:-1])
 	q += ' and ' + urban_areas[-1]
-	return q, country['data']['name']
+	return q, names(country)
 
 def q_linguistic_makeup(country):
 	q = "The linguistic makeup of this country is: "
@@ -44,11 +52,11 @@ def q_linguistic_makeup(country):
 			lang_full += '({})'.format(lang['note'])
 		langs.append(lang_full)
 	q += ', '.join(langs)
-	return q, country['data']['name']
+	return q, names(country)
 
 def q_location(country):
 	q = "This country is in " + country['data']['geography']['location']
-	return q, country['data']['name']
+	return q, names(country)
 
 def q_flag_description(country):
 	q = "This country's flag "
@@ -56,7 +64,7 @@ def q_flag_description(country):
 	q += fd['description']
 	if 'note' in fd.keys():
 		q += '; ' + fd['note']
-	return q, country['data']['name']
+	return q, names(country)
 
 # f_ fact
 def f_current_environmental_issues(country):
@@ -93,7 +101,7 @@ def q_misc_facts(country):
 	q = 'Facts:\n'
 	for fact in facts:
 		q = q + '- ' + fact(country) + '\n'
-	return q, country['data']['name']
+	return q, names(country)
 
 
 def q_national_symbol(country):
@@ -117,11 +125,11 @@ def q_national_symbol(country):
 def q_capital_etymology(country):
 	q = "Etymology of this counry's capital: "
 	etymology = country['data']['government']['capital']['etymology']
-	return q + etymology, country['data']['name']
+	return q + etymology, names(country)
 
 def q_country_name_etymology(country):
 	q = "Etymology of this country's name: " + country['data']['government']['country_name']['etymology']
-	return q, country['data']['name']
+	return q, names(country)
 
 
 QUESTION_FUNCS = [q_intro_question, q_major_urban_areas, 
