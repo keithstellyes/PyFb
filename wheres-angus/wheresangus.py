@@ -19,7 +19,10 @@ def get_factbook():
 	return json.load(open(FACTBOOK_PATH, 'r'))
 
 def q_intro_question(country):
-	intro = '.'.join(country['data']['introduction']['background'].split('\n')[0].split('.')[0:2])
+	sents = country['data']['introduction']['background'].split('\n')[0].split('.')
+	segment_begin_max = len(sents) - 2
+	segment_begin = random.randint(0, segment_begin_max)
+	intro = '.'.join(sents[segment_begin:(segment_begin + 2)])
 
 	return intro.replace(country['data']['name'], '[COUNTRY]'), country['data']['name']
 
@@ -54,6 +57,44 @@ def q_flag_description(country):
 	if 'note' in fd.keys():
 		q += '; ' + fd['note']
 	return q, country['data']['name']
+
+# f_ fact
+def f_current_environmental_issues(country):
+	return 'environmental issues: ' + ','.join(country['data']['geography']['environment']['current_issues'])
+
+def f_intl_environmental_agreements(country):
+	s = 'party to the following international environmental agreements: ' 
+	return s + ','.join(country['data']['geography']['environment']['international_agreements']['party_to'])
+
+def f_climate(country):
+	return 'climate: ' + country['data']['geography']['climate']
+
+def f_hazards(country):
+	return 'natural hazards: ' + ', '.join([h['description'] for h in country['data']['geography']['natural_hazards']])
+
+def f_urban_population(country):
+	return '% urbanized population: ' + str(country['data']['people']['urbanization']['urban_population']['value'])
+
+def f_exports(country):
+	d = country['data']['economy']['exports']
+	s = 'chief exports: ' + ', '.join(d['commodities']['by_commodity'])
+	s = s + '; major partners: '
+	s = s + ', '.join(['{} {}%'.format(p['name'], p['percent']) for p in d['partners']['by_country']])
+	return s
+
+FACT_FUNCS = [f_current_environmental_issues, f_intl_environmental_agreements,
+ f_climate, f_hazards, f_urban_population, f_exports]
+
+def q_misc_facts(country):
+	facts = FACT_FUNCS[:]
+	random.shuffle(facts)
+	facts = facts[0:random.randint(2, 3)]
+
+	q = 'Facts:\n'
+	for fact in facts:
+		q = q + '- ' + fact(country) + '\n'
+	return q, country['data']['name']
+
 
 def q_national_symbol(country):
 	q = "This country's national symbol has"
