@@ -29,34 +29,37 @@ class Question:
 		return '<Question answer="{}" message="{}" image_path="{}">'.format(self.answer, self.message, self.image_path)
 
 def get_master():
-	fb = get_factbook()
-	wd = get_wikidata()
-	results = {}
-	fb_countries = fb['countries']
-	for fb_country_k in fb_countries.keys():
-		fb_country = fb_countries[fb_country_k]
-		results[fb_country_k] = {'fb': fb_country}
-		ccode = None
-		try:
-			ccode = fb_countries[fb_country_k]['data']['communications']['internet']['country_code'][:3]
-		except KeyError:
-			pass
-		if ccode is not None:
-			wd_found = False
-			for wd_country_k in wd.keys():
-				if wd_country_k == '_raw':
-					continue
-				if 'wd' in results[fb_country_k].keys():
-					msg = 'Found duplicate TLD entry: curr {} {}'.format(fb_country_k, ccode)
-					raise Exception(msg)
-				if ccode in wd[wd_country_k]['tlds']:
-					results[fb_country_k]['wd'] = wd[wd_country_k]
-					wd_found = True
-					break
-			if not wd_found:
-				print('Could not find wikidata for:', fb_country_k, ccode)
-
-	return results
+	try:
+		return json.load(open('master.json', 'r'))
+	except FileNotFoundError:
+		fb = get_factbook()
+		wd = get_wikidata()
+		results = {}
+		fb_countries = fb['countries']
+		for fb_country_k in fb_countries.keys():
+			fb_country = fb_countries[fb_country_k]
+			results[fb_country_k] = {'fb': fb_country}
+			ccode = None
+			try:
+				ccode = fb_countries[fb_country_k]['data']['communications']['internet']['country_code'][:3]
+			except KeyError:
+				pass
+			if ccode is not None:
+				wd_found = False
+				for wd_country_k in wd.keys():
+					if wd_country_k == '_raw':
+						continue
+					if 'wd' in results[fb_country_k].keys():
+						msg = 'Found duplicate TLD entry: curr {} {}'.format(fb_country_k, ccode)
+						raise Exception(msg)
+					if ccode in wd[wd_country_k]['tlds']:
+						results[fb_country_k]['wd'] = wd[wd_country_k]
+						wd_found = True
+						break
+				if not wd_found:
+					print('Could not find wikidata for:', fb_country_k, ccode)
+		json.dump(results, open('master.json', 'w'))
+		return results
 
 # http://wikidata.org/wiki/Wikidata:SPARQL_tutorial
 # https://people.wikimedia.org/~bearloga/notes/wdqs-python.html
@@ -97,13 +100,13 @@ def get_wikidata():
 		json.dump(results, open(WIKIDATA_PATH, 'w'))
 		return results
 
-def download_country_coat_of_arms(master, country_name):
-	url = master[country_name]['wd']['coatOfArms']
+def download_wikidata_svg(master, country_name, key):
+	url = master[country_name]['wd'][key]
 	with open('out.svg', 'w') as f:
 		r = requests.get(url)
 		f.write(r.text)
 	cairosvg.svg2png(url='out.svg', write_to='out.png')
-	return 'out.png'
+	return 'out.png'	
 
 def names(master, country):
 	names = [master[country]['fb']['data']['name']]
@@ -245,12 +248,19 @@ def q_flag_image(master, country_name):
 	raise Exception('No flag!')
 
 def q_coat_of_arms(master, country_name):
-	return Question(answer=names(master, country_name), image_path=download_country_coat_of_arms(master, country_name))
+	a = names(master, country_name)
+	image = download_wikidata_svg(master, country_name, 'coatOfArms')
+	return Question(answer=a, image_path=image)
+
+def q_locator_map(master, country_name):
+	a = names(master, country_name)
+	image = download_wikidata_svg(master, country_name, 'mapImage')
+	return Question(answer=a, image_path=image)	
 
 QUESTION_FUNCS = [q_intro_question, q_major_urban_areas, 
 	q_linguistic_makeup, q_location, q_flag_description,
 	q_national_symbol, q_capital_etymology, q_country_name_etymology, 
-	q_misc_facts, q_flag_image, q_coat_of_arms]
+	q_misc_facts, q_flag_image, q_coat_of_arms, q_locator_map]
 
 def all_questions_for_country(master, country):
 	questions = {}
