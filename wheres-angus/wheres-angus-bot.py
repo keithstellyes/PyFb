@@ -11,12 +11,6 @@ import wheresangus
 this_dir = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DB_PATH = this_dir + '/wheresangus.db'
 
-DO_FLAG_QUESTION_RATE = 0.25
-
-def thing_happens(rate):
-	assert rate >= 0.0 and rate <= 1.0
-	return random.random() < rate
-
 class Db:
 	def __init__(self, db_path=DEFAULT_DB_PATH):
 		self.conn = sqlite3.connect(db_path)
@@ -57,15 +51,13 @@ class Db:
 			return []
 
 def make_post_content():
-	factbook = wheresangus.get_factbook()
-	if thing_happens(DO_FLAG_QUESTION_RATE):
-		return '', 'out-flag.png', wheresangus.random_flag(factbook)
-	else:
-		q, a = wheresangus.random_question(factbook)
-		q = q.replace(a, 'COUNTRY')
-		photo = ap.random_angus_photo_file_path()
-		post_text = q + '\n({})'.format(photo.split('/')[-1])
-		return post_text, photo, a
+	master = wheresangus.get_master()
+	rq = wheresangus.random_question(master)
+	q = rq.message
+	a = rq.answer
+	q = q.replace(a, 'COUNTRY')
+	photo = rq.image_path if rq.image_path is not None else ap.random_angus_photo_file_path()
+	return q, photo, a
 
 def get_fb_client():
 	return PyFb(json.load(open('../tokens.json', 'r'))['wheresangus'])

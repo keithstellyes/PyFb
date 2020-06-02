@@ -5,5 +5,4 @@ sys.path.append('..')
 from pyfb import util as pyfbutil
 import wheresangus
 
-malaysia = json.load(open('malaysia.json', 'r'))
-factbook = wheresangus.get_factbook()
+master = wheresangus.get_master()
