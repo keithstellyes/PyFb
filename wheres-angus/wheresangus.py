@@ -86,7 +86,7 @@ def get_wikidata():
 			id = row['countryId']['value'].lower()
 			if id not in results.keys():
 				results[id] = {}
-				results[id]['mapImage'] = row['mapImage']['value']
+				results[id]['mapImage'] = []
 				try:
 					results[id]['coatOfArms'] = row['coatOfArms']['value']
 				except KeyError:
@@ -95,18 +95,23 @@ def get_wikidata():
 				results[id]['tlds'] = []
 			results[id]['tlds'].append(row['tldsLabel']['value'])
 			results[id]['tlds'] = list(set(results[id]['tlds']))
+			results[id]['mapImage'].append(row['mapImage']['value'])
+			results[id]['mapImage'] = list(set(results[id]['mapImage']))
 		results['_raw'] = raw_results
 		results = results
 		json.dump(results, open(WIKIDATA_PATH, 'w'))
 		return results
 
-def download_wikidata_svg(master, country_name, key):
-	url = master[country_name]['wd'][key]
+def dl_svg_as_png(url):
 	with open('out.svg', 'w') as f:
 		r = requests.get(url)
 		f.write(r.text)
 	cairosvg.svg2png(url='out.svg', write_to='out.png')
-	return 'out.png'	
+	return 'out.png'
+
+def download_wikidata_svg(master, country_name, key):
+	dl_svg_as_png(master[country_name]['wd'][key])
+	return 'out.png'
 
 def names(master, country):
 	names = [master[country]['fb']['data']['name']]
@@ -254,7 +259,7 @@ def q_coat_of_arms(master, country_name):
 
 def q_locator_map(master, country_name):
 	a = names(master, country_name)
-	image = download_wikidata_svg(master, country_name, 'mapImage')
+	image = dl_svg_as_png(random.choice(master[country_name]['wd']['mapImage']))
 	return Question(answer=a, image_path=image)	
 
 QUESTION_FUNCS = [q_intro_question, q_major_urban_areas, 
