@@ -46,6 +46,7 @@ The original bots are as follows (please link to original if standing up an inst
 * `wheres-angus`: [Where's Angus Bot 1215](https://www.facebook.com/wheresangus1215)
 * `electoral-college`: [Election Bot 1776](https://www.facebook.com/Election-Bot-1776-107617517622641/)
 * `xkcd`: [XKCD Bot](https://www.facebook.com/XKCD-Bot-695-108218474234986/)
+* `exodia`: [Exodiabot 1996](https://www.facebook.com/Exodiabot-1996-124895845814170)
 
 NOTE: if you're just using the `pyfb` library, and not any of the bot logic, none of the above applies.
 
