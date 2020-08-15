@@ -1,1 +1,3 @@
 parts.pkl
+tmp*
+cache.db
