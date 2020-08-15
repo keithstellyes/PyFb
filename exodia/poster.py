@@ -6,7 +6,6 @@ import imagedrawer, model
 fb_client = PyFb(json.load(open('../tokens.json', 'r'))['exodia'])
 deck = model.Deck(id=0)
 hand = deck.draw_five()
-
 image_path = 'out.png'
 imagedrawer.draw_hand('bg.jpg', hand, out_path=image_path)
 message = ''
