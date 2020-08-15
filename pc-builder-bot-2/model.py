@@ -21,6 +21,7 @@ except FileNotFoundError:
 class Computer:
 	def __init__(self):
 		self.cpu = None
+		self.gpu = None
 		self.mobo = None
 		self.case = None
 		self.psu = None
@@ -90,6 +91,9 @@ def pstr_psu(psu):
 def pstr_memory(mem):
 	return '{} {} {} {}MHz'.format(mem.brand, mem.model, mem.module_type, mem.speed.cycles // HZ_IN_MHZ)
 
+def pstr_gpu(gpu):
+	return '{} {}'.format(gpu.brand, gpu.chipset)
+
 def pstr_storage(storage):
 	gb = storage.capacity.total // BYTES_IN_GB
 	capacity = '{}GB'.format(gb) if gb < 1000 else '{}TB'.format(gb // 1000)
@@ -98,6 +102,7 @@ def pstr_storage(storage):
 def pstr_pc(pc):
 	s = 'CPU: {}\n'.format(pstr_cpu(pc.cpu))
 	s += 'Motherboard: {}\n'.format(pstr_mobo(pc.mobo))
+	s += 'GPU: {}\n'.format(pstr_gpu(pc.gpu))
 	s += 'Case: {}\n'.format(pstr_case(pc.case))
 	s += 'PSU: {}\n'.format(pstr_psu(pc.psu))
 	s += 'RAM: {}\n'.format(','.join(['{}x {}'.format(pc.memory[m], pstr_memory(m)) for m in pc.memory.keys()]))
@@ -107,6 +112,7 @@ def pstr_pc(pc):
 def random_pc():
 	pc = Computer()
 	pc.cpu = random.choice(PARTS['cpu'])
+	pc.gpu = random.choice(PARTS['video-card'])
 	pc.mobo = random.choice(all_possible_mobo(pc))
 	pc.case = random.choice(PARTS['case'])
 	pc.psu = random.choice(PARTS['power-supply'])

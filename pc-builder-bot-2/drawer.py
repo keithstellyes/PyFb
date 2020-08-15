@@ -16,6 +16,7 @@ def draw_pc_mosaic(pc):
 	parts = []
 	parts.append(do_img(model.pstr_case(pc.case)))
 	parts.append(do_img(model.pstr_cpu(pc.cpu)))
+	parts.append(do_img(model.pstr_gpu(pc.gpu)))
 	parts.append(do_img(model.pstr_mobo(pc.mobo)))
 	i = 0
 	for m in pc.memory.keys():
