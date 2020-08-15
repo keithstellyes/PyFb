@@ -1,12 +1,12 @@
 from ddgimageapi import dl_first_image
 import model
 from PIL import Image, ImageDraw
-import sys
+import random, sys
 sys.path.insert(0, '..')
 from angusphotos.ap import random_angus_photo_file_path
 
 def do_img(query):
-	filename = dl_first_image(query, 'tmp.png')[0]
+	filename = dl_first_image(query, 'tmp-{}.png'.format(random.randint(0, 2**128)))[0]
 	if filename is None:
 		print('could not get an image for', query, 'using a placeholder angus pic')
 		return Image.open(random_angus_photo_file_path())
