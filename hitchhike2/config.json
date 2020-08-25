@@ -1,0 +1,25 @@
+{
+	"points": {
+		"x offset": 10000,
+		"y offset": 5000,
+		"fontsize": 6,
+		"pointsize": 2,
+		"max name length":10
+	},
+	"landcolor": "#00F000",
+	"route line color":"crimson",
+	"dpi":300,
+	"miles": true,
+	"routes": {
+		"default origin": "Space Needle",
+		"default destination": "Little Havana, Miami",
+		"max distance": 5,
+		"completion radius": 1
+	},
+	"messages": {
+		"new route": "Starting new route! Going from {origin} to {dest}!",
+		"route step": "We are currently at {curr_place}, started at {origin}, going to {dest}",
+		"suffix": "\n\nTo request a place, prefix a command with goto, be specific. BAD: `goto Mcdonald's`, GOOD: `goto Mcdonald's Oklahoma City`",
+		"request prefix": "goto"
+	}
+}

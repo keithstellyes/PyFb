@@ -30,7 +30,7 @@ class PyFb:
 
 	def create_360_photo_post(self, message, image_path):
 		return self.graph.put_photo(image=open(image_path, 'rb'), message=message, 
-			allow_sphereical_photo=True)
+			allow_spherical_photo=True)
 
 	def get_post_reactions(self, post_id):
 		return [r for r in self.graph.get_all_connections(id=post_id, connection_name='reactions')]
