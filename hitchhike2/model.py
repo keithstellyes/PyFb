@@ -34,8 +34,7 @@ class Route(Base):
 	origin = Column(String(37), ForeignKey('places.osm_id'))
 	dest = Column(String(37), ForeignKey('places.osm_id'))
 
-	def step(self, place):
-		session = Session()
+	def step(self, place, session):
 		rs = RouteStep()
 		rs.route_id = self.id
 		rs.route_step = current_step().route_step + 1

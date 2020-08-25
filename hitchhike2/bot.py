@@ -59,7 +59,6 @@ def do_post(message, place, route_id, route_step, session):
 	else:
 		new_post.fb_post_id = fb_client.create_post(message='Failed to do street view ' + CONFIG['messages']['suffix'], image_path='map.png')['post_id']
 	session.add(new_post)
-	session.commit()
 
 def step():
 	current_route = model.current_route()
@@ -112,7 +111,7 @@ def step():
 			elif chosen_req is None:
 				fb_client.comment_on_post(post_id=req.comment_id, message='Sure! Let\'s go there!')
 				chosen_req = req
-				current_route.step(place)
+				current_route.step(place, session)
 				chosen_place = place
 			else:
 				fb_client.comment_on_post(post_id=req.comment_id, message='I parsed this and found it, but not going here, sorry :(')
@@ -122,7 +121,6 @@ def step():
 			print('couldnt pick a place, so no post')
 			return
 		msg = CONFIG['messages']['route step'].format(curr_place=chosen_place.name, origin=origin_place, dest=dest_place) + CONFIG['messages']['suffix']
-		session.commit()
 		do_post(msg, chosen_place, current_route.id, curr_step.route_step + 1, session)
 		session.commit()
 
