@@ -85,6 +85,7 @@ def step():
 		comments = [c for c in fb_client.get_post_comments(fb_post_id)]
 		print('COMMENTS:', comments)
 		reqs = {}
+		already_seen_reqs = set()
 		for comment in comments:
 			user = comment['from']
 			msg = comment['message']
@@ -96,6 +97,8 @@ def step():
 				req.query = msg[len(prefix):].strip()
 				if not session.query(exists().where(model.Request.comment_id == req.comment_id)).scalar():
 					session.add(req)
+				else:
+					already_seen_reqs.add(req.comment_id)
 				# avoid duplicate requests
 				reqs[req.user_id] = req
 		chosen_req = None
@@ -105,13 +108,22 @@ def step():
 		for req in reqs:
 			place = mapper.place_search(req.query)
 			if place is None:
-				fb_client.comment_on_post(post_id=req.comment_id, message="Failed to find '{}' on Nominatim (Open Street Map)".format(req.query))
+				if req.comment_id not in already_seen_reqs:
+					fb_client.comment_on_post(post_id=req.comment_id, message="Failed to find '{}' on Nominatim (Open Street Map)".format(req.query))
+				else:
+					print('aready saw', req.comment_id)
 				print(req.query, 'cant be found')
 			elif model.distance_between_places(place, curr_place) > max_dist:
-				fb_client.comment_on_post(post_id=req.comment_id, message='Too far, must be within {} {}'.format(max_dist, model.measurement()))
+				if req.comment_id not in already_seen_reqs:
+					fb_client.comment_on_post(post_id=req.comment_id, message='Too far, must be within {} {}'.format(max_dist, model.measurement()))
+				else:
+					print('aready saw', req.comment_id)
 				print(req.query, 'is too far')
 			elif chosen_req is None:
-				fb_client.comment_on_post(post_id=req.comment_id, message='Sure! Let\'s go there!')
+				if req.comment_id not in already_seen_reqs:
+					fb_client.comment_on_post(post_id=req.comment_id, message='Sure! Let\'s go there!')
+				else:
+					print('aready saw', req.comment_id)
 				chosen_req = req
 				current_route.step(place, session)
 				chosen_place = place
