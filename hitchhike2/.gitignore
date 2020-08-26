@@ -1,3 +1,5 @@
 streetview.sh
 *.jpg*
 *.png*
+cache.sqlite
+hh.db
