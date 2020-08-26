@@ -13,7 +13,7 @@
 	"routes": {
 		"default origin": "Space Needle",
 		"default destination": "Little Havana, Miami",
-		"max distance": 5,
+		"max distance": 30,
 		"completion radius": 1
 	},
 	"messages": {
