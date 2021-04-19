@@ -43,8 +43,8 @@ class Db:
 			(user_id, post_id, given_answer))
 		self.conn.commit()
 
-	def get_leaderboard_top10(self):
-		self.cursor.execute('select userId, COUNT(*) as times FROM answers GROUP BY userId ORDER BY times DESC LIMIT 10;')
+	def get_leaderboard_top25(self):
+		self.cursor.execute('select userId, COUNT(*) as times FROM answers GROUP BY userId ORDER BY times DESC LIMIT 25;')
 		try:
 			return [_ for _ in self.cursor.fetchall()]
 		except:
@@ -94,7 +94,7 @@ def do_answers(fb_client, db_client):
 		message = 'Correct! You have gotten {} questions right'.format(db_client.get_user_num_correct_answers(correct_user))
 		fb_client.comment_on_post(post_id=correct_users[correct_user], message=message)
 
-	leaderboards = db_client.get_leaderboard_top10()
+	leaderboards = db_client.get_leaderboard_top25()
 	message = 'The potential answers were {}'.format(answers)
 	pos = 1
 	if leaderboards is not None and len(leaderboards) > 0:
