@@ -7,4 +7,4 @@ facebook-sdk==3.1.0
 numpy>=1.16.2
 matplotlib==3.2.1
 SPARQLWrapper==1.8.5
-CairoSVG==2.4.2
+CairoSVG==2.5.1
